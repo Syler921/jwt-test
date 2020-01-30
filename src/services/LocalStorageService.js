@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { ApiUrlService } from 'shared/services';
+//import { ApiUrlService } from 'shared/services';
 import { Promise } from 'es6-promise';
 
 var TokenStorage = {
