@@ -12,8 +12,7 @@ import axios from 'axios';
 import { Promise } from "es6-promise";
 import { TokenStorage } from "../services/LocalStorageService.js";
 
-
-
+import jwt_decode from 'jwt-decode';
 
   
 
@@ -24,6 +23,7 @@ export default {
     msg: String
   },
   mounted(){
+    var jwtDecode = require('jwt-decode');
     axios.interceptors.response.use( (response) => {
       // Return a successful response back to the calling service
       return response;
@@ -83,7 +83,7 @@ export default {
       TokenStorage.storeToken(response.data.accessToken)
       TokenStorage.storeRefreshToken(response.data.refreshToken)
       
-      
+     
       setInterval(()=> {
 
         const config = {
@@ -100,6 +100,14 @@ export default {
 
 
         const AuthStr = 'Bearer '.concat(TokenStorage.getToken()); 
+
+
+         console.log('jwtDecode,',jwtDecode(TokenStorage.getToken()))
+         var test = jwtDecode(TokenStorage.getToken());
+
+         var decoded = jwt_decode(TokenStorage.getToken());
+console.log('***',decoded);
+
         axios.get('http://localhost:4000/posts', { headers: { Authorization: AuthStr } })
         .then(response => {
             // If request is good...
@@ -110,7 +118,7 @@ export default {
           });
 
 
-      },10000)
+      },3000)
    
 
 

@@ -86,7 +86,7 @@ app.post('/login', (req, res) => {
   // Authenticate User
 
   const username = req.body.username
-  const user = { name: username }
+  const user = { name: 'test' }
 
   const accessToken = generateAccessToken(user)
   const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '11000' })
@@ -95,7 +95,7 @@ app.post('/login', (req, res) => {
 })
 
 function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10000' })
+  return jwt.sign( { name: user.name ,mutatePayload:true}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10000' })
 }
 
 app.listen(4000)
