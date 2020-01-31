@@ -20,13 +20,13 @@ var TokenStorage = {
   getNewToken: function() {
     return new Promise((resolve, reject) => {
       axios
-        .post('/refresh/token-path-api', { refresh_token: TokenStorage.getRefreshToken() })
+        .post('http://localhost:4000/token', { token: TokenStorage.getRefreshToken() })
         .then(response => {
+            console.log('response ??? - --- ', response)
+            TokenStorage.storeToken(response.data.accessToken);
+            //TokenStorage.storeRefreshToken(response.data.refresh_token);
 
-            TokenStorage.storeToken(response.data.token);
-            TokenStorage.storeRefreshToken(response.data.refresh_token);
-
-          resolve(response.data.token);
+          resolve(response.data.accessToken);
         })
         .catch((error) => {
           reject(error);
@@ -56,4 +56,4 @@ clear: function() {
   }
 }
 
-export default {TokenStorage}
+export {TokenStorage}

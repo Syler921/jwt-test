@@ -28,15 +28,18 @@ export default {
       // Return a successful response back to the calling service
       return response;
     }, (error) => {
+      console.warn(error)
       // Return any error which is not due to authentication back to the calling service
       if (error.response.status !== 401) {
         return new Promise((resolve, reject) => {
+          console.log('error.config.url---',error.config.url)
+          console.warn('greshen error handler',error)
           reject(error);
         });
       }
 
       // Logout user if token refresh didn't work or user is disabled
-      if (error.config.url == '/api/token/refresh' || error.response.message == 'Account is disabled.') {
+      if (error.config.url == 'http://localhost:4000/token' || error.response.message == 'Account is disabled.') {
         
         TokenStorage.clear();
         //router.push({ name: 'root' });
@@ -69,20 +72,53 @@ export default {
         });
     });
 
+    
     axios.post('http://localhost:4000/login', {
       firstName: 'Fred',
       lastName: 'Flintstone'
     })
     .then(function (response) {
       console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      TokenStorage.storeToken(response.data.accessToken)
+      TokenStorage.storeRefreshToken(response.data.refreshToken)
+      
+      
+      setInterval(()=> {
+
+        const config = {
+            headers: { 
+              Authorization: `Bearer ${TokenStorage.getToken()}`,
+              'Access-Control-Allow-Origin': '*'
+            }
+        }          
+           
+
+        const bodyParameters = {
+          key: "value"
+        };
+
+
+        const AuthStr = 'Bearer '.concat(TokenStorage.getToken()); 
+        axios.get('http://localhost:4000/posts', { headers: { Authorization: AuthStr } })
+        .then(response => {
+            // If request is good...
+            console.log(response);
+          })
+        .catch((error) => {
+            console.log('error ' + error);
+          });
+
+
+      },4000)
    
 
 
+    })
+    .catch(function(err){
+      console.log(err)
+    });
   }
+
 }
 </script>
 
