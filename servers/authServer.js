@@ -86,6 +86,7 @@ app.post('/login', (req, res) => {
   // Authenticate User
 
   const username = req.body.username
+  console.log('username',username)
   const user = { name: 'test' }
 
   const accessToken = generateAccessToken(user)
