@@ -22,7 +22,7 @@ var TokenStorage = {
       axios
         .post('http://localhost:4000/token', { token: TokenStorage.getRefreshToken() })
         .then(response => {
-            console.log('response ??? - --- ', response)
+            console.log('new token generated after refresh ??? - --- ', response.data.accessToken)
             TokenStorage.storeToken(response.data.accessToken);
             //TokenStorage.storeRefreshToken(response.data.refresh_token);
 

@@ -79,6 +79,7 @@ export default {
     })
     .then(function (response) {
       console.log(response);
+      console.log('response.data.accessToken-----',response.data.accessToken)
       TokenStorage.storeToken(response.data.accessToken)
       TokenStorage.storeRefreshToken(response.data.refreshToken)
       
@@ -109,7 +110,7 @@ export default {
           });
 
 
-      },4000)
+      },10000)
    
 
 
