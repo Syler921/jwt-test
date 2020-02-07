@@ -5,8 +5,10 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const jwt = require('jsonwebtoken')
-
-
+const axios = require('axios').default;
+//import * as util from 'util' // has no default export
+// or 
+var util = require('util')
 
 const 
     passport          =     require('passport')
@@ -50,7 +52,7 @@ const posts = [
 
 
 app.get('/', function(req, res) {
-  res.sendfile('servers/index.html');
+  res.sendFile(__dirname + '/index.html');
 });
  
 
@@ -117,21 +119,7 @@ function generateAccessToken(user) {
 
 // ---------------------------- FB Login implementation 
 
-passport.use(new FacebookStrategy({
-  clientID: config.facebook_api_key,
-  clientSecret:config.facebook_api_secret ,
-  callbackURL: config.callback_url
-},
-function(accessToken, refreshToken, profile, done) {
-  process.nextTick(function () {
-    //Check whether the User exists or not using profile.id
-    if(config.use_database) {
-       //Further code of Database.
-    }
-    return done(null, profile);
-  });
-}
-));
+
 
 
 
@@ -162,11 +150,12 @@ passport.use(new FacebookStrategy({
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
+      console.log('here---')
       //Check whether the User exists or not using profile.id
       console.log(accessToken)
       console.log(refreshToken)
       console.log(profile)
-
+      
       if(config.use_database) {
         // if sets to true
         // pool.query("SELECT * from user_info where user_id="+profile.id, (err,rows) => {
@@ -185,7 +174,7 @@ passport.use(new FacebookStrategy({
 ));
 
 
-app.set('views', __dirname + '/views');
+app.set('views','C:/JWT_server/VUE JWT/my-jwt/servers/views');
 app.set('view engine', 'ejs');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -212,13 +201,52 @@ app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
 
 
 app.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { successRedirect : '/', failureRedirect: '/login' }),
-  function(req, res) {
+  
+  passport.authenticate('facebook', { }),
+  function(req, res, next) {
+    
+    console.log('fb  callback ????')
     console.log('redirectg ? ')
-    res.redirect('/');
+
+    //console.log(util.inspect(res))
+    //console.log('essss',res.sessionStore)
+    //res.render('account', { user: res.sessionStore });
+     //res.render({ user: req.user })
+    console.log('ioser !!! ',req.user['_json'].id)
+    console.log('ioser !!! ',req.user['_json'].name)
+    
+    //http://localhost:4000/login
+    //Content-Type: application/json
+    //
+    //{
+    //  "username": "Jim"
+    //}
+    axios.post('http://localhost:4000/login', {
+      username: req.user['_json'].name,
+      userid: req.user['_json'].id
+    })
+    .then(function (response) {
+      console.log(response.data);
+
+      res.json({
+        accessToken:response.data.accessToken,
+        refreshToken:response.data.refreshToken
+      })
+    })
+    .catch(function (error) {
+      //console.log(error);
+      res.sendStatus(204)
+    });
+
+
+    //res.sendStatus(204)
+    //console.log(res)
+   // res.json(util.inspect(res))
+   // res.redirect('/');
+   //next();
   });
 
-app.get('/logout', function(req, res){
+app.get('/logoutFB', function(req, res){
   req.logout();
   res.redirect('/');
 });
@@ -226,7 +254,7 @@ app.get('/logout', function(req, res){
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login')
+  res.redirect('/')
 }
 
 

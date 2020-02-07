@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+     
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <script type="text/JavaScript" >console.log(<%=user %>)</script>
+    <% if (!user) { %>
+      <div style="width:500px;height:180px;">
+        <h2 style="font-size:40px;">Welcome! Please log in.</h2>
+        <a href="/auth/facebook"><img src="fb-login.jpg" width="151" height="24"></a>
+        
+        </div>
+    <% } else { %>
+        <h2>Hello, <%= user.displayName %>.</h2>
+        <a href="/logoutFB">LOGOUT<img src="" width="151" height="24"></a>
+    <% } %>
+    <script type="text/JavaScript" src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        
+    </script>
+  </body>
+</html>
