@@ -1,5 +1,8 @@
 <template>
   <div class="hello">
+
+    <a href="http://localhost:4000/auth/facebook">Login Facebook *** </a>
+    <a href="http://localhost:4000/logoutFB">Logout Facebook</a>
     <h1>{{ msg }}</h1>
     TEST
   </div>
@@ -85,7 +88,23 @@ export default {
       
      
       setInterval(()=> {
-
+        function getCookie(cname) {
+          var name = cname + "=";
+          var ca = document.cookie.split(';');
+          for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+            }
+          }
+          return "";
+        }
+       console.warn('coookie ??? ----', getCookie('accessToken'))
+      console.warn('coookie ??? ----', getCookie('refreshToken'))
+       
         const config = {
             headers: { 
               Authorization: `Bearer ${TokenStorage.getToken()}`,

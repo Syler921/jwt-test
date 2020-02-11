@@ -104,7 +104,7 @@ app.post('/login', (req, res) => {
   // Authenticate User
 
   const username = req.body.username
-  console.log('username',username)
+  //console.log('username',username)
   const user = { name: 'test' }
 
   const accessToken = generateAccessToken(user)
@@ -221,22 +221,37 @@ app.get('/auth/facebook/callback',
     //{
     //  "username": "Jim"
     //}
+    console.log(1)
+
+    res.cookie('accessToken',req.user['_json'].id, { maxAge: 900000, httpOnly: false });
+    res.cookie('refreshToken',req.user['_json'].name, { maxAge: 900000, httpOnly: false });
+      //res.json({
+      //  accessToken:response.data.accessToken,
+      //  refreshToken:response.data.refreshToken
+     // })
+    res.redirect('http://localhost:8080');
+    /*
     axios.post('http://localhost:4000/login', {
-      username: req.user['_json'].name,
-      userid: req.user['_json'].id
+      'username': req.user['_json'].name,
+      'userid': req.user['_json'].id
     })
     .then(function (response) {
-      console.log(response.data);
+      console.log(2)
 
-      res.json({
-        accessToken:response.data.accessToken,
-        refreshToken:response.data.refreshToken
-      })
+      console.log(response.data);
+      res.cookie('accessToken',response.data.accessToken, { maxAge: 900000, httpOnly: true });
+      res.cookie('refreshToken',response.data.refreshToken, { maxAge: 900000, httpOnly: true });
+      //res.json({
+      //  accessToken:response.data.accessToken,
+      //  refreshToken:response.data.refreshToken
+     // })
+      res.redirect('https://localhost:8080');
+      //next()
     })
     .catch(function (error) {
       //console.log(error);
       res.sendStatus(204)
-    });
+    });*/
 
 
     //res.sendStatus(204)
