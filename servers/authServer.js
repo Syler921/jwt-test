@@ -223,14 +223,14 @@ app.get('/auth/facebook/callback',
     //}
     console.log(1)
 
-    res.cookie('accessToken',req.user['_json'].id, { maxAge: 900000, httpOnly: false });
-    res.cookie('refreshToken',req.user['_json'].name, { maxAge: 900000, httpOnly: false });
+    //res.cookie('accessToken',req.user['_json'].id, { maxAge: 900000, httpOnly: false });
+    //res.cookie('refreshToken',req.user['_json'].name, { maxAge: 900000, httpOnly: false });
       //res.json({
       //  accessToken:response.data.accessToken,
       //  refreshToken:response.data.refreshToken
      // })
-    res.redirect('http://localhost:8080');
-    /*
+    //res.redirect('http://localhost:8080');
+    
     axios.post('http://localhost:4000/login', {
       'username': req.user['_json'].name,
       'userid': req.user['_json'].id
@@ -239,19 +239,19 @@ app.get('/auth/facebook/callback',
       console.log(2)
 
       console.log(response.data);
-      res.cookie('accessToken',response.data.accessToken, { maxAge: 900000, httpOnly: true });
-      res.cookie('refreshToken',response.data.refreshToken, { maxAge: 900000, httpOnly: true });
+      res.cookie('accessToken',response.data.accessToken, { maxAge: 900000, httpOnly: false });
+      res.cookie('refreshToken',response.data.refreshToken, { maxAge: 900000, httpOnly: false });
       //res.json({
       //  accessToken:response.data.accessToken,
       //  refreshToken:response.data.refreshToken
      // })
-      res.redirect('https://localhost:8080');
+      res.redirect('http://localhost:8080');
       //next()
     })
     .catch(function (error) {
       //console.log(error);
       res.sendStatus(204)
-    });*/
+    });
 
 
     //res.sendStatus(204)
