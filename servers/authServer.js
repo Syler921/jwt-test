@@ -50,6 +50,23 @@ const posts = [
   }
 ]
 
+var users = [
+  {
+    username: 'SC2',
+    userid:'fbid',
+    password:'null',
+    name: 'test name',
+    email:'test@abv.bg'
+  },
+
+  {
+    username: 'sc',
+    userid:'fbid',
+    password:'sc',
+    name: 'test name ',
+    email:'test2@abv.bg'
+  }
+]
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
@@ -103,14 +120,27 @@ app.delete('/logout', (req, res) => {
 app.post('/login', (req, res) => {
   // Authenticate User
 
-  const username = req.body.username
+  var username = req.body.username
+  var password = req.body.password
   //console.log('username',username)
-  const user = { name: 'test' }
-
-  const accessToken = generateAccessToken(user)
-  const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '11000' })
-  refreshTokens.push(refreshToken)
-  res.json({ accessToken: accessToken, refreshToken: refreshToken })
+  console.log(username + "----" +  password)
+  var user = null;
+  for( var i = 0; i < users.length; i++) {
+    if ( username == users[i].username && password == users[i].password ) {
+      user = users[i];
+    }
+  }
+  console.log(user)
+  if (user && username !== "" && password !== "") {
+    console.log(user)
+    var accessToken = generateAccessToken(user)
+    var refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1111000' })
+    refreshTokens.push(refreshToken)
+    res.json({ accessToken: accessToken, refreshToken: refreshToken })
+  }
+  else { 
+    res.json({ error : 'user not found' }) 
+  }
 })
 
 function generateAccessToken(user) {
