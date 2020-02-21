@@ -42,7 +42,7 @@ var TokenStorage = {
     localStorage.setItem(TokenStorage.LOCAL_STORAGE_REFRESH_TOKEN, refreshToken);
   },
 
-clear: function() {
+  clear: function() {
     localStorage.removeItem(TokenStorage.LOCAL_STORAGE_TOKEN);
     localStorage.removeItem(TokenStorage.LOCAL_STORAGE_REFRESH_TOKEN);
   },

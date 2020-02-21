@@ -5,7 +5,7 @@
     <a href="http://localhost:4000/logoutFB">Logout Facebook</a>
     <h1>{{ msg }}</h1>
     <div class="login">
-      <form class="form-signin">
+     
         <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         <label for="inputEmail" class="sr-only">Email address</label>
@@ -18,9 +18,9 @@
           </label>
         </div>
         <button class="btn btn-lg btn-primary btn-block" @click="login()">Login</button>
-        <button class="btn btn-lg btn-primary btn-block" @click="login()">Login with FB</button>
+        <a class="btn btn-lg btn-primary btn-block" href="http://localhost:4000/auth/facebook">Login with FB</a>
         <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
-      </form>
+      
     </div>
   </div>
 </template>
@@ -43,39 +43,23 @@ export default {
     msg: String
   },
   methods:{
-    login(){
-      var jwtDecode = require('jwt-decode');
-      var username = document.getElementById('inputEmail').value
-      var password = document.getElementById('inputPassword').value
-
-      axios.post('http://localhost:4000/login', {
-          username: username,
-          password: password
-        })
-      .then(function (response) {
-        console.log(response);
-        console.log('response.data.accessToken-----',response.data.accessToken)
-        TokenStorage.storeToken(response.data.accessToken)
-        TokenStorage.storeRefreshToken(response.data.refreshToken)
-        
-      
-        setInterval(()=> {
-          function getCookie(cname) {
-            var name = cname + "=";
-            var ca = document.cookie.split(';');
-            for(var i = 0; i < ca.length; i++) {
-              var c = ca[i];
-              while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-              }
-              if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-              }
-            }
-            return "";
-          }
-          console.warn('coookie ??? ----', getCookie('accessToken'))
-          console.warn('coookie ??? ----', getCookie('refreshToken'))
+    getCookie(cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    },
+    simulateWork(){
+        var jwtDecode = require('jwt-decode');
+       setInterval(()=> {
         
           const config = {
               headers: { 
@@ -110,13 +94,33 @@ export default {
 
 
         },3000)
+    },
+    login(){
+      var jwtDecode = require('jwt-decode');
+      var username = document.getElementById('inputEmail').value
+      var password = document.getElementById('inputPassword').value
+
+      axios.post('http://localhost:4000/login', {
+          username: username,
+          password: password
+        })
+      .then(function (response) {
+        console.log(response);
+        console.log('response.data.accessToken-----',response.data.accessToken)
+        TokenStorage.storeToken(response.data.accessToken)
+        TokenStorage.storeRefreshToken(response.data.refreshToken)
+        
+      
+       
       }).catch(function(err){
         console.log(err)
       });
     }
   },
   mounted(){
-    console.log('test mounted')
+    //console.warn('coookie ??? ----', this.getCookie('accessToken'))
+   
+
 
 
     axios.interceptors.response.use( (response) => {
@@ -167,6 +171,17 @@ export default {
         });
     });
 
+
+    var accessTokenFromCookie = this.getCookie('accessToken')
+    var refreshTokenFromCookie =  this.getCookie('refreshToken')
+    
+     
+    if ( accessTokenFromCookie != "" && refreshTokenFromCookie != "" ) {
+      console.log('empty ??? ')
+      TokenStorage.storeToken(accessTokenFromCookie)
+      TokenStorage.storeToken(refreshTokenFromCookie)
+      this.simulateWork();
+    }
     /*
     var jwtDecode = require('jwt-decode');
     axios.interceptors.response.use( (response) => {

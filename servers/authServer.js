@@ -53,12 +53,18 @@ const posts = [
 var users = [
   {
     username: 'SC2',
-    userid:'fbid',
+    userid:'testid',
     password:'null',
     name: 'test name',
     email:'test@abv.bg'
   },
-
+  {
+    username: 'Stefan Cankov',
+    userid:'3501069813253120',
+    password:'null',
+    name: 'test name',
+    email:'test@abv.bg'
+  },
   {
     username: 'sc',
     userid:'fbid',
@@ -122,16 +128,26 @@ app.post('/login', (req, res) => {
 
   var username = req.body.username
   var password = req.body.password
+  var userid = req.body.userid
   //console.log('username',username)
-  console.log(username + "----" +  password)
+  console.log(username + "----" +  password + '----' + userid)
   var user = null;
   for( var i = 0; i < users.length; i++) {
-    if ( username == users[i].username && password == users[i].password ) {
+    console.log(username == users[i].username)
+    console.log(username + ' //// name ' + users[i].username)
+    console.log(userid == users[i].userid)
+    console.log(userid + ' //// id ' + users[i].userid)
+    if ( 
+      (username == users[i].username && password == users[i].password) 
+      ||  
+      ( username == users[i].username && userid == users[i].userid ) 
+    ) {
       user = users[i];
     }
+    
   }
   console.log(user)
-  if (user && username !== "" && password !== "") {
+  if ( (user && username !== "" && password !== "") ) {
     console.log(user)
     var accessToken = generateAccessToken(user)
     var refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1111000' })
@@ -263,6 +279,7 @@ app.get('/auth/facebook/callback',
     
     axios.post('http://localhost:4000/login', {
       'username': req.user['_json'].name,
+      'password':'not needed',
       'userid': req.user['_json'].id
     })
     .then(function (response) {
