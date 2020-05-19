@@ -7,6 +7,7 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import 'bootstrap';
 
 export default {
   name: 'app',
@@ -16,7 +17,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "node_modules/bootstrap/scss/bootstrap";
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

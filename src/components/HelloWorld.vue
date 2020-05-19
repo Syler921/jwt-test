@@ -80,6 +80,7 @@ export default {
     .then(function (response) {
       console.log(response);
       console.log('response.data.accessToken-----',response.data.accessToken)
+      console.log('response.data.accessToken-----',response.data.refreshToken)
       TokenStorage.storeToken(response.data.accessToken)
       TokenStorage.storeRefreshToken(response.data.refreshToken)
       

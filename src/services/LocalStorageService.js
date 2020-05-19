@@ -24,7 +24,7 @@ var TokenStorage = {
         .then(response => {
             console.log('new token generated after refresh ??? - --- ', response.data.accessToken)
             TokenStorage.storeToken(response.data.accessToken);
-            //TokenStorage.storeRefreshToken(response.data.refresh_token);
+            TokenStorage.storeRefreshToken(response.data.refresh_token);
 
           resolve(response.data.accessToken);
         })
