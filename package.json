@@ -27,7 +27,7 @@
     "vue-template-compiler": "^2.6.10",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^9.0.0"
   },
   "eslintConfig": {
     "root": true,
